@@ -3,12 +3,11 @@ import Chart from "chart.js/auto";
 
 export default function WeekChart({ workouts }) {
   const canvasRef = useRef();
-  let chartInstance = useRef(null);
+  const chartInstance = useRef(null);
 
   useEffect(() => {
     const ctx = canvasRef.current.getContext("2d");
 
-    // Destroy previous chart if exists
     if (chartInstance.current) chartInstance.current.destroy();
 
     // Last 7 days (oldest → newest)
@@ -33,60 +32,58 @@ export default function WeekChart({ workouts }) {
           {
             label: "Calories Burned",
             data,
-            backgroundColor: "rgba(215, 238, 255, 0.6)",
-            borderColor: "rgb(215, 238, 255)",
-            borderWidth: 1,
+            backgroundColor: "rgba(111, 72, 47, 0.88)",
+            borderColor: "#6F482F",
+            borderWidth: 1.5,
+            borderRadius: 6,
+            maxBarThickness: 56,
           },
         ],
       },
       options: {
         responsive: true,
-        scales: { 
-          y: { 
+        maintainAspectRatio: false,
+        scales: {
+          y: {
             beginAtZero: true,
             ticks: {
-              color: '#ffffff',
-              font: {
-                size: 16,
-                weight: 'bold'
-              }
+              color: "#000000",
+              font: { size: 13, weight: "600" },
             },
             grid: {
-              color: 'rgba(255, 255, 255, 0.1)'
-            }
+              color: "rgba(111, 72, 47, 0.14)",
+            },
+            border: { color: "rgba(111, 72, 47, 0.3)" },
           },
           x: {
             ticks: {
-              color: '#ffffff',
-              font: {
-                size: 16,
-                weight: 'bold'
-              }
+              color: "#000000",
+              font: { size: 12, weight: "600" },
             },
-            grid: {
-              color: 'rgba(255, 255, 255, 0.1)'
-            }
-          }
+            grid: { display: false },
+            border: { color: "rgba(111, 72, 47, 0.3)" },
+          },
         },
         plugins: {
           legend: {
             labels: {
-              color: '#ffffff',
-              font: {
-                size: 18,
-                weight: 'bold'
-              }
-            }
-          }
-        }
+              color: "#000000",
+              font: { size: 14, weight: "600" },
+            },
+          },
+        },
       },
     });
+
+    return () => chartInstance.current?.destroy();
   }, [workouts]);
 
   return (
     <div className="card">
       <h2>Last 7 Days Burn</h2>
-      <canvas ref={canvasRef} height="120"></canvas>
+      <div style={{ position: "relative", height: "320px" }}>
+        <canvas ref={canvasRef}></canvas>
+      </div>
     </div>
   );
 }
